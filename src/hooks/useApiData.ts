@@ -1,27 +1,54 @@
-import { useApiStore } from '../store/apiStore';
+import { use, useEffect, useState } from 'react';
+import { useApiStore } from '../store/simpleApiStore';
+import { apiService } from '../services/api';
 import type { User } from '../types/api';
 
-// Hook that creates a promise for the use hook
+// Custom hook that combines React.use with Zustand
 export const useApiData = () => {
-  const { users, loading, error, hasData, fetchUsers } = useApiStore();
-  
-  // Create a promise that resolves to the current state
-  const createDataPromise = (): Promise<{
-    users: User[];
-    loading: boolean;
-    error: string | null;
-    hasData: boolean;
-  }> => {
-    return new Promise((resolve) => {
-      // Resolve immediately with current state
-      resolve({ users, loading, error, hasData });
-    });
+  const { users, loading, error, hasData, setUsers, setLoading, setError, clearError, reset } = useApiStore();
+  const [apiPromise, setApiPromise] = useState<Promise<User[]> | null>(null);
+
+  // Function to trigger fetch
+  const fetchUsers = () => {
+    setLoading(true);
+    setError(null);
+    const promise = apiService.fetchUsers();
+    setApiPromise(promise);
   };
-  
+
+  // Component that uses React.use to handle the promise
+  const ApiDataHandler = () => {
+    // Early return check should be after all hooks
+    const fetchedUsers = apiPromise ? use(apiPromise) : null;
+
+    // Always call useEffect at the top level to avoid conditional hooks
+    useEffect(() => {
+      if (!fetchedUsers) return;
+
+      console.log('✅ Data fetched via React.use, saving to Zustand store:', fetchedUsers);
+      setUsers(fetchedUsers);
+      setApiPromise(null); // Reset promise
+    }, [fetchedUsers]);
+
+    return null;
+  };
+
   return {
-    dataPromise: createDataPromise(),
+    // Data from store
+    users,
+    loading,
+    error,
+    hasData,
+
+    // Actions
     fetchUsers,
-    clearError: useApiStore.getState().clearError,
-    reset: useApiStore.getState().reset,
+    clearError,
+    reset,
+
+    // Component for handling React.use
+    ApiDataHandler,
+
+    // Flag to show if we're fetching
+    isFetching: apiPromise !== null,
   };
 };

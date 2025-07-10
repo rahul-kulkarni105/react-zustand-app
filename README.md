@@ -40,6 +40,7 @@ src/
 ## Key Implementation Details
 
 ### Zustand Store Features
+
 - **Middleware**: Uses `devtools`, `subscribeWithSelector`, and `immer`
 - **Type Safety**: Full TypeScript support
 - **Selectors**: Optimized selectors for performance
@@ -47,11 +48,13 @@ src/
 - **State Management**: Loading, error, and success states
 
 ### React 19 "use" Hook
+
 - Integrates with Zustand store
 - Handles suspense and error boundaries
 - Provides clean data fetching patterns
 
 ### API Simulation
+
 - Simulates real API delays (1.5 seconds)
 - Random error simulation (20% error rate)
 - Mock user data similar to JSONPlaceholder
@@ -59,11 +62,13 @@ src/
 ## Getting Started
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -96,10 +101,34 @@ src/
 ## Development
 
 - **ESLint**: Code linting
+- **Oxlint**: Fast linting with Oxc
+- **Prettier**: Code formatting
 - **TypeScript**: Type checking
 - **Vite**: Hot module replacement
 - **React DevTools**: Component debugging
 - **Zustand DevTools**: State debugging
+
+## Linting & Formatting
+
+```bash
+# Run oxlint only
+npm run lint:ox
+
+# Run oxlint with auto-fix
+npm run lint:ox:fix
+
+# Run prettier formatting
+npm run format
+
+# Check prettier formatting
+npm run format:check
+
+# Run oxlint + prettier
+npm run lint:format
+
+# Complete linting pipeline (fix + format + check + build)
+npm run lint:complete
+```
 
 ## Build
 

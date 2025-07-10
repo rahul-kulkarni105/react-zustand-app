@@ -7,6 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:ox": "oxlint",
+    "lint:ox:fix": "oxlint --fix",
+    "lint:all": "npm run lint && npm run lint:ox",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:format": "npm run lint:ox && npm run format",
+    "lint:complete": "npm run lint:ox:fix && npm run format && npm run lint:ox && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -24,6 +31,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "oxlint": "^1.6.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.3"
