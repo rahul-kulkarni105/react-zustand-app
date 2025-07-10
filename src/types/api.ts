@@ -11,6 +11,15 @@ export interface User {
   };
 }
 
+export interface Post {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+  tags: string[];
+  createdAt: string;
+}
+
 export interface ApiError {
   message: string;
   status?: number;

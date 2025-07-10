@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import { useApiData } from './hooks/useApiData';
+import { usePostsData } from './hooks/usePostsData';
+import { PostsDisplay } from './components/PostsDisplay';
 import type { User } from './types/api';
 
 // Simple Error Boundary
@@ -118,6 +120,16 @@ function App() {
     isFetching,
   } = useApiData();
 
+  const {
+    posts,
+    loading: postsLoading,
+    error: postsError,
+    hasData: hasPostsData,
+    fetchPosts,
+    clearError: clearPostsError,
+    reset: resetPosts,
+  } = usePostsData();
+
   return (
     <>
       <div>
@@ -176,9 +188,44 @@ function App() {
         />
       </div>
 
+      {/* Posts Section - Traditional Fetch */}
+      <div className="card">
+        <h2>📝 Posts Section (Traditional Fetch + Zustand)</h2>
+
+        <div className="button-group">
+          <button
+            onClick={fetchPosts}
+            disabled={postsLoading}
+            className="fetch-button"
+          >
+            {postsLoading ? 'Loading...' : 'Fetch Posts'}
+          </button>
+
+          {postsError && (
+            <button onClick={clearPostsError} className="clear-error-button">
+              Clear Error
+            </button>
+          )}
+
+          {hasPostsData && (
+            <button onClick={resetPosts} className="reset-button">
+              Reset Posts
+            </button>
+          )}
+        </div>
+
+        {/* Display posts from Zustand store */}
+        <PostsDisplay
+          posts={posts}
+          loading={postsLoading}
+          error={postsError}
+          hasData={hasPostsData}
+        />
+      </div>
+
       <p className="read-the-docs">
-        Simple React.use + Zustand integration - fetch data and display from
-        store
+        Two patterns: React.use + Zustand (Users) vs Traditional Fetch + Zustand
+        (Posts)
       </p>
     </>
   );
